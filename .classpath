@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="deps/lombok/lombok.jar"/>
+	<classpathentry kind="lib" path="deps/lombok/spi-0.2.3-pre.jar"/>
+	<classpathentry kind="lib" path="deps/lombok/org.eclipse.jdt.core_3.5.0.v_963.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
