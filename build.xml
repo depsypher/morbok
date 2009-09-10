@@ -124,8 +124,10 @@
 			</manifest>
 		</jar>
 		<copy file="dist/morbok-${morbok.version}.jar" tofile="dist/morbok.jar" />
+<!--
 		<copy file="dist/morbok.jar" todir="../testbok/lib" />
 		<copy file="dist/morbok.jar" todir="/Applications/eclipse3.5/Eclipse.app/Contents/MacOS" />
+-->
 	</target>
 
 	<property name="credentialsFile" value="google.properties" />
