@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
 
 import lombok.core.AnnotationValues;
 import lombok.eclipse.EclipseAnnotationHandler;
-import lombok.eclipse.EclipseAST.Node;
+import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.PKG.MemberExistsResult;
 import morbok.Logger;
 
@@ -37,9 +37,9 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
      * {@inheritDoc}
      */
     @Override
-    public boolean handle(AnnotationValues<Logger> annotation, Annotation ast, Node annotationNode)
+    public boolean handle(AnnotationValues<Logger> annotation, Annotation ast, EclipseNode annotationNode)
     {
-        Node typeNode = annotationNode.up();
+        EclipseNode typeNode = annotationNode.up();
 
         TypeDeclaration typeDecl = null;
         if (typeNode.get() instanceof TypeDeclaration)
@@ -54,7 +54,6 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
             annotationNode.addError("@Logger is only supported on a class.");
             return false;
         }
-
         long pos = (long)typeDecl.sourceStart << 32 | typeDecl.sourceEnd;
         int pS = (int)(pos >> 32), pE = (int)pos;
 

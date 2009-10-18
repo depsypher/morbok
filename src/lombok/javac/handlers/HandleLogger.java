@@ -7,7 +7,7 @@ package lombok.javac.handlers;
 import static lombok.javac.handlers.PKG.*;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
-import lombok.javac.JavacAST.Node;
+import lombok.javac.JavacNode;
 import lombok.javac.handlers.PKG.MemberExistsResult;
 import morbok.Logger;
 
@@ -36,9 +36,9 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
      * {@inheritDoc}
      */
     @Override
-    public boolean handle(AnnotationValues<Logger> annotation, JCAnnotation ast, Node annotationNode)
+    public boolean handle(AnnotationValues<Logger> annotation, JCAnnotation ast, JavacNode annotationNode)
     {
-        Node typeNode = annotationNode.up();
+        JavacNode typeNode = annotationNode.up();
 
         JCClassDecl typeDecl = null;
         if (typeNode.get() instanceof JCClassDecl)
