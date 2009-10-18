@@ -26,7 +26,7 @@ package morbok.core;
  */
 public class Version {
 	// ** CAREFUL ** - this class must always compile with 0 dependencies (it must not refer to any other sources or libraries).
-	private static final String VERSION = "0.0.2-HEAD";
+	private static final String VERSION = "0.0.3-HEAD";
 
 	private Version() {
 		//Prevent instantiation
