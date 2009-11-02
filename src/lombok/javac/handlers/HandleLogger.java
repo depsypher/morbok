@@ -4,11 +4,11 @@
  */
 package lombok.javac.handlers;
 
-import static lombok.javac.handlers.PKG.*;
+import static lombok.javac.handlers.JavacHandlerUtil.*;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
-import lombok.javac.handlers.PKG.MemberExistsResult;
+import lombok.javac.handlers.JavacHandlerUtil.MemberExistsResult;
 import morbok.Logger;
 
 import org.mangosdk.spi.ProviderFor;
