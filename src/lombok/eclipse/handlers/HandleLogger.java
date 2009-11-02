@@ -9,6 +9,7 @@ import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import java.lang.reflect.Modifier;
 
 import lombok.core.AnnotationValues;
+import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.EclipseHandlerUtil.MemberExistsResult;
@@ -37,7 +38,7 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
      * {@inheritDoc}
      */
     @Override
-    public boolean handle(AnnotationValues<Logger> annotation, Annotation ast, EclipseNode annotationNode)
+    public boolean handle(AnnotationValues<Logger> annotation, Annotation source, EclipseNode annotationNode)
     {
         EclipseNode typeNode = annotationNode.up();
 
@@ -67,12 +68,12 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
             fieldDecl.modifiers = (Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
 
             fieldDecl.type = new QualifiedTypeReference(
-                    new char[][] { "org".toCharArray(), "apache".toCharArray(), "commons".toCharArray(), "logging".toCharArray(), "Log".toCharArray() },
+                    Eclipse.fromQualifiedName("org.apache.commons.logging.Log"),
                     new long[] { pos, pos, pos, pos, pos });
 
             MessageSend send = new MessageSend();
             send.receiver = new QualifiedNameReference(
-                    new char[][] { "org".toCharArray(), "apache".toCharArray(), "commons".toCharArray(), "logging".toCharArray(), "LogFactory".toCharArray() },
+                    Eclipse.fromQualifiedName("org.apache.commons.logging.LogFactory"),
                     new long[] { pos, pos, pos, pos, pos }, pS, pE);
 
             send.arguments = new Expression[] { new StringLiteral(logName.toCharArray(), 0, 0, 0) };
@@ -94,7 +95,7 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
     {
         String name = annotation.getInstance().name();
 
-        if (name == null || !name.matches("[a-zA-Z0-9$]*"))
+        if (name == null || !name.matches("^[^0-9][a-zA-Z0-9$]*$"))
             return null;
 
         return name.toCharArray();

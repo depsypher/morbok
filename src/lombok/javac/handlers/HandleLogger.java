@@ -36,7 +36,7 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
      * {@inheritDoc}
      */
     @Override
-    public boolean handle(AnnotationValues<Logger> annotation, JCAnnotation ast, JavacNode annotationNode)
+    public boolean handle(AnnotationValues<Logger> annotation, JCAnnotation source, JavacNode annotationNode)
     {
         JavacNode typeNode = annotationNode.up();
 
@@ -84,7 +84,7 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
     {
         String name = annotation.getInstance().name();
 
-        if (name == null || !name.matches("[a-zA-Z0-9$]*"))
+        if (name == null || !name.matches("^[^0-9][a-zA-Z0-9$]*$"))
             return null;
 
         return name;
