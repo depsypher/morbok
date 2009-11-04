@@ -64,6 +64,7 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
         if (logVariableName != null && fieldExists(new String(logVariableName), typeNode) == MemberExistsResult.NOT_EXISTS)
         {
             FieldDeclaration fieldDecl = new FieldDeclaration(logVariableName, 0, -1);
+            Eclipse.setGeneratedBy(fieldDecl, source);
 
             fieldDecl.modifiers = (Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
 
@@ -71,16 +72,28 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
                     Eclipse.fromQualifiedName("org.apache.commons.logging.Log"),
                     new long[] { pos, pos, pos, pos, pos });
 
+            Eclipse.setGeneratedBy(fieldDecl.type, source);
+
             MessageSend send = new MessageSend();
+            Eclipse.setGeneratedBy(send, source);
+
             send.receiver = new QualifiedNameReference(
                     Eclipse.fromQualifiedName("org.apache.commons.logging.LogFactory"),
                     new long[] { pos, pos, pos, pos, pos }, pS, pE);
 
-            send.arguments = new Expression[] { new StringLiteral(logName.toCharArray(), 0, 0, 0) };
+            send.receiver.statementEnd = pE;
+            Eclipse.setGeneratedBy(send.receiver, source);
+
+            Expression arg = new StringLiteral(logName.toCharArray(), 0, 0, 0);
+            Eclipse.setGeneratedBy(arg, source);
+            arg.statementEnd = pE;
+            send.arguments = new Expression[] { arg };
+
             send.selector = "getLog".toCharArray();
+
+            send.nameSourcePosition = pos;
             send.sourceStart = pS;
-            send.sourceEnd = pE;
-            send.statementEnd = pE;
+            send.sourceEnd = send.statementEnd = pE;
 
             fieldDecl.initialization = send;
 
