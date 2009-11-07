@@ -87,16 +87,12 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
                     fieldDecl.type = new QualifiedTypeReference(
                             Eclipse.fromQualifiedName("java.util.logging.Logger"),
                             new long[] { pos, pos, pos, pos });
-
-                    Eclipse.error(null, "java util");
                     break;
 
                 case LOG4J:
                     fieldDecl.type = new QualifiedTypeReference(
                             Eclipse.fromQualifiedName("org.apache.commons.logging.Log"),
                             new long[] { pos, pos, pos, pos, pos });
-
-                    Eclipse.error(null, "log4j");
                     break;
 
                 default:
