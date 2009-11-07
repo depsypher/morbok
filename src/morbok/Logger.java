@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
  * <p>
  * The log variable is declared private static final.
  * The default log name is "log" which can be overridden by providing a name.
+ * The default log implementation is log4j which can be overrided by providing a log type.
  *
  * @author rayvanderborght
  */

@@ -115,7 +115,6 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
                             new long[] { pos, pos, pos, pos, pos }, pS, pE);
 
                     send.selector = "getLogger".toCharArray();
-                    Eclipse.error(null, "java util");
                     break;
 
                 case LOG4J:
@@ -124,7 +123,6 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
                             new long[] { pos, pos, pos, pos, pos }, pS, pE);
 
                     send.selector = "getLog".toCharArray();
-                    Eclipse.error(null, "log4j");
                     break;
 
                 default:
