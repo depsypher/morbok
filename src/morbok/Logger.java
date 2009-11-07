@@ -22,4 +22,12 @@ import java.lang.annotation.Target;
 public @interface Logger
 {
     String name() default "log";
+    morbok.Logger.Type type() default morbok.Logger.Type.LOG4J;
+
+    /** */
+    public static enum Type
+    {
+        LOG4J,
+        JAVA
+    }
 }

@@ -68,18 +68,68 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
 
             fieldDecl.modifiers = (Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
 
-            fieldDecl.type = new QualifiedTypeReference(
-                    Eclipse.fromQualifiedName("org.apache.commons.logging.Log"),
-                    new long[] { pos, pos, pos, pos, pos });
+//            InputStream in = this.getClass().getResourceAsStream("logger.properties");
+//            Properties props = new Properties();
+//            try
+//            {
+//                if (in != null)
+//                    props.load(in);
+//            }
+//            catch(IOException e)
+//            {
+//                e.printStackTrace();
+//            }
+//            Eclipse.error(null, props.getProperty("foo", "not found"));
 
+            switch (annotation.getInstance().type())
+            {
+                case JAVA:
+                    fieldDecl.type = new QualifiedTypeReference(
+                            Eclipse.fromQualifiedName("java.util.logging.Logger"),
+                            new long[] { pos, pos, pos, pos });
+
+                    Eclipse.error(null, "java util");
+                    break;
+
+                case LOG4J:
+                    fieldDecl.type = new QualifiedTypeReference(
+                            Eclipse.fromQualifiedName("org.apache.commons.logging.Log"),
+                            new long[] { pos, pos, pos, pos, pos });
+
+                    Eclipse.error(null, "log4j");
+                    break;
+
+                default:
+                    throw new IllegalStateException("Got an unexpected Logger type: " + annotation.getInstance().type());
+            }
             Eclipse.setGeneratedBy(fieldDecl.type, source);
 
             MessageSend send = new MessageSend();
             Eclipse.setGeneratedBy(send, source);
 
-            send.receiver = new QualifiedNameReference(
-                    Eclipse.fromQualifiedName("org.apache.commons.logging.LogFactory"),
-                    new long[] { pos, pos, pos, pos, pos }, pS, pE);
+            switch (annotation.getInstance().type())
+            {
+                case JAVA:
+                    send.receiver = new QualifiedNameReference(
+                            Eclipse.fromQualifiedName("java.util.logging.Logger"),
+                            new long[] { pos, pos, pos, pos, pos }, pS, pE);
+
+                    send.selector = "getLogger".toCharArray();
+                    Eclipse.error(null, "java util");
+                    break;
+
+                case LOG4J:
+                    send.receiver = new QualifiedNameReference(
+                            Eclipse.fromQualifiedName("org.apache.commons.logging.LogFactory"),
+                            new long[] { pos, pos, pos, pos, pos }, pS, pE);
+
+                    send.selector = "getLog".toCharArray();
+                    Eclipse.error(null, "log4j");
+                    break;
+
+                default:
+                    throw new IllegalStateException("Got an unexpected Logger type: " + annotation.getInstance().type());
+            }
 
             send.receiver.statementEnd = pE;
             Eclipse.setGeneratedBy(send.receiver, source);
@@ -88,8 +138,6 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
             Eclipse.setGeneratedBy(arg, source);
             arg.statementEnd = pE;
             send.arguments = new Expression[] { arg };
-
-            send.selector = "getLog".toCharArray();
 
             send.nameSourcePosition = pos;
             send.sourceStart = pS;

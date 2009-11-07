@@ -58,8 +58,23 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
 
         if (logVariableName != null && fieldExists(logVariableName, typeNode) == MemberExistsResult.NOT_EXISTS)
         {
-            JCExpression objectType = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "Log");
-            JCExpression logFactory = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "LogFactory", "getLog");
+            JCExpression objectType = null;
+            JCExpression logFactory = null;
+            switch (annotation.getInstance().type())
+            {
+                case JAVA:
+                    objectType = chainDots(maker, typeNode, "java", "util", "logging", "Logger");
+                    logFactory = chainDots(maker, typeNode, "java", "util", "logging", "Logger", "getLogger");
+                    break;
+
+                case LOG4J:
+                    objectType = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "Log");
+                    logFactory = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "LogFactory", "getLog");
+                    break;
+
+                default:
+                    throw new IllegalStateException("Got an unexpected Logger type: " + annotation.getInstance().type());
+            }
 
             //argument list for method
             ListBuffer<JCExpression> args = new ListBuffer<JCExpression>();
