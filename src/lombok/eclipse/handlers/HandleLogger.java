@@ -68,59 +68,56 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
 
             fieldDecl.modifiers = (Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
 
-//            InputStream in = this.getClass().getResourceAsStream("logger.properties");
-//            Properties props = new Properties();
-//            try
-//            {
-//                if (in != null)
-//                    props.load(in);
-//            }
-//            catch(IOException e)
-//            {
-//                e.printStackTrace();
-//            }
-//            Eclipse.error(null, props.getProperty("foo", "not found"));
-
-            switch (annotation.getInstance().type())
-            {
-                case JAVA:
-                    fieldDecl.type = new QualifiedTypeReference(
-                            Eclipse.fromQualifiedName("java.util.logging.Logger"),
-                            new long[] { pos, pos, pos, pos });
-                    break;
-
-                case LOG4J:
-                    fieldDecl.type = new QualifiedTypeReference(
-                            Eclipse.fromQualifiedName("org.apache.commons.logging.Log"),
-                            new long[] { pos, pos, pos, pos, pos });
-                    break;
-
-                default:
-                    throw new IllegalStateException("Got an unexpected Logger type: " + annotation.getInstance().type());
-            }
-            Eclipse.setGeneratedBy(fieldDecl.type, source);
-
             MessageSend send = new MessageSend();
             Eclipse.setGeneratedBy(send, source);
 
             switch (annotation.getInstance().type())
             {
-                case JAVA:
-                    send.receiver = new QualifiedNameReference(
-                            Eclipse.fromQualifiedName("java.util.logging.Logger"),
-                            new long[] { pos, pos, pos, pos, pos }, pS, pE);
+                case COMMONS:
+                {
+                    fieldDecl.type = new QualifiedTypeReference(
+                            Eclipse.fromQualifiedName("org.apache.commons.logging.Log"),
+                            new long[] { pos, pos, pos, pos, pos });
 
-                    send.selector = "getLogger".toCharArray();
-                    break;
+                    Eclipse.setGeneratedBy(fieldDecl.type, source);
 
-                case LOG4J:
                     send.receiver = new QualifiedNameReference(
                             Eclipse.fromQualifiedName("org.apache.commons.logging.LogFactory"),
                             new long[] { pos, pos, pos, pos, pos }, pS, pE);
 
                     send.selector = "getLog".toCharArray();
                     break;
+                }
+                case JAVA:
+                {
+                    fieldDecl.type = new QualifiedTypeReference(
+                            Eclipse.fromQualifiedName("java.util.logging.Logger"),
+                            new long[] { pos, pos, pos, pos });
 
+                    Eclipse.setGeneratedBy(fieldDecl.type, source);
+
+                    send.receiver = new QualifiedNameReference(
+                            Eclipse.fromQualifiedName("java.util.logging.Logger"),
+                            new long[] { pos, pos, pos, pos, pos }, pS, pE);
+
+                    send.selector = "getLogger".toCharArray();
+                    break;
+                }
+                case SLF4J:
+                {
+                    fieldDecl.type = new QualifiedTypeReference(
+                            Eclipse.fromQualifiedName("org.slf4j.Logger"),
+                            new long[] { pos, pos, pos });
+
+                    Eclipse.setGeneratedBy(fieldDecl.type, source);
+
+                    send.receiver = new QualifiedNameReference(
+                            Eclipse.fromQualifiedName("org.slf4j.LoggerFactory"),
+                            new long[] { pos, pos, pos }, pS, pE);
+
+                    send.selector = "getLogger".toCharArray();
+                    break;
+                }
                 default:
                     throw new IllegalStateException("Got an unexpected Logger type: " + annotation.getInstance().type());
             }

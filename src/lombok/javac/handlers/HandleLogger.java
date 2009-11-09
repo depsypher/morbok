@@ -60,16 +60,22 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
         {
             JCExpression objectType = null;
             JCExpression logFactory = null;
+
             switch (annotation.getInstance().type())
             {
+                case COMMONS:
+                    objectType = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "Log");
+                    logFactory = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "LogFactory", "getLog");
+                    break;
+
                 case JAVA:
                     objectType = chainDots(maker, typeNode, "java", "util", "logging", "Logger");
                     logFactory = chainDots(maker, typeNode, "java", "util", "logging", "Logger", "getLogger");
                     break;
 
-                case LOG4J:
-                    objectType = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "Log");
-                    logFactory = chainDots(maker, typeNode, "org", "apache", "commons", "logging", "LogFactory", "getLog");
+                case SLF4J:
+                    objectType = chainDots(maker, typeNode, "org", "slf4j", "Logger");
+                    logFactory = chainDots(maker, typeNode, "org", "slf4j", "LoggerFactory", "getLogger");
                     break;
 
                 default:

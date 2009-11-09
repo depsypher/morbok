@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * <p>
  * The log variable is declared private static final.
  * The default log name is "log" which can be overridden by providing a name.
- * The default log implementation is log4j which can be overrided by providing a log type.
+ * The default log implementation is apache commons logging which can be overrided by providing a log type.
  *
  * @author rayvanderborght
  */
@@ -23,12 +23,13 @@ import java.lang.annotation.Target;
 public @interface Logger
 {
     String name() default "log";
-    morbok.Logger.Type type() default morbok.Logger.Type.LOG4J;
+    morbok.Logger.Type type() default morbok.Logger.Type.COMMONS;
 
     /** */
     public static enum Type
     {
-        LOG4J,
-        JAVA
+        COMMONS,
+        JAVA,
+        SLF4J
     }
 }
