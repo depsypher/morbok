@@ -53,7 +53,7 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
             return false;
         }
 
-        String logVariableName = this.getLogName(annotation);
+        String logVariableName = this.getLogVariableName(annotation);
         TreeMaker maker = typeNode.getTreeMaker();
 
         if (logVariableName != null && fieldExists(logVariableName, typeNode) == MemberExistsResult.NOT_EXISTS)
@@ -85,7 +85,12 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
             //argument list for method
             ListBuffer<JCExpression> args = new ListBuffer<JCExpression>();
 
-            JCLiteral literal = maker.Literal(TypeTags.CLASS, typeDecl.sym.type.toString());
+            String value = annotation.getInstance().value();
+            String logName = (value == null || "".equals(value.trim()))
+                    ? typeDecl.sym.type.toString()
+                    : value;
+
+            JCLiteral literal = maker.Literal(TypeTags.CLASS, logName);
             args.append(literal);
 
             JCExpression logValue = maker.Apply(List.<JCExpression> nil(), logFactory, args.toList());
@@ -101,9 +106,9 @@ public class HandleLogger implements JavacAnnotationHandler<Logger>
     }
 
     /* */
-    private String getLogName(AnnotationValues<Logger> annotation)
+    private String getLogVariableName(AnnotationValues<Logger> annotation)
     {
-        String name = annotation.getInstance().name();
+        String name = annotation.getInstance().var();
 
         if (name == null || !name.matches("^[^0-9][a-zA-Z0-9$]*$"))
             return null;

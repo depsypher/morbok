@@ -58,8 +58,7 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
         long pos = (long)typeDecl.sourceStart << 32 | typeDecl.sourceEnd;
         int pS = (int)(pos >> 32), pE = (int)pos;
 
-        String logName = typeNode.getPackageDeclaration() + "." + typeNode.getName();
-        char[] logVariableName = this.getLogName(annotation);
+        char[] logVariableName = this.getLogVariableName(annotation);
 
         if (logVariableName != null && fieldExists(new String(logVariableName), typeNode) == MemberExistsResult.NOT_EXISTS)
         {
@@ -125,7 +124,8 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
             send.receiver.statementEnd = pE;
             Eclipse.setGeneratedBy(send.receiver, source);
 
-            Expression arg = new StringLiteral(logName.toCharArray(), 0, 0, 0);
+            String logValue = this.getLogValue(annotation, typeNode);
+            Expression arg = new StringLiteral(logValue.toCharArray(), 0, 0, 0);
             Eclipse.setGeneratedBy(arg, source);
             arg.statementEnd = pE;
             send.arguments = new Expression[] { arg };
@@ -143,9 +143,18 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
     }
 
     /* */
-    private char[] getLogName(AnnotationValues<Logger> annotation)
+    private String getLogValue(AnnotationValues<Logger> annotation, EclipseNode typeNode)
     {
-        String name = annotation.getInstance().name();
+        String value = annotation.getInstance().value();
+        return (value == null || "".equals(value.trim()))
+            ? typeNode.getPackageDeclaration() + "." + typeNode.getName()
+            : value;
+    }
+
+    /* */
+    private char[] getLogVariableName(AnnotationValues<Logger> annotation)
+    {
+        String name = annotation.getInstance().var();
 
         if (name == null || !name.matches("^[^0-9][a-zA-Z0-9$]*$"))
             return null;
