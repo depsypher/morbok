@@ -111,7 +111,16 @@
 		</copy>
 	</target>
 
-	<target name="dist" description="Builds THE morbok.jar file which contains everything " depends="clean, compile, version">
+	<target name="-unpackLibs">
+		<unjar dest="build/morbok">
+			<patternset>
+				<include name="lombok/installer**/*.*"/>
+			</patternset>
+			<path refid="morbok.libs.path" />
+		</unjar>
+	</target>
+
+	<target name="dist" description="Builds THE morbok.jar file which contains everything " depends="clean,  -unpackLibs, compile, version">
 		<mkdir dir="dist" />
 		<copy file="doc/changelog.markdown" tofile="build/changelog.txt" />
 		<jar destfile="dist/morbok-${morbok.version}.jar">
@@ -119,7 +128,7 @@
 			<fileset dir="dist" includes="lombok.eclipse.agent.jar" />
 			<fileset dir="build" includes="changelog.txt" />
 			<manifest>
-				<attribute name="Main-Class" value="lombok.installer.Installer" />
+				<attribute name="Main-Class" value="lombok.installer.MorbokInstaller" />
 				<attribute name="Morbok-Version" value="${morbok.version}" />
 			</manifest>
 		</jar>
