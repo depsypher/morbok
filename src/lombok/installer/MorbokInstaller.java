@@ -174,7 +174,7 @@ public class MorbokInstaller {
 
 		appWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		appWindow.setResizable(false);
-		appWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(MorbokInstaller.class.getResource("morbokIcon.png")));
+		appWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(MorbokInstaller.class.getResource("lombokIcon.png")));
 
 		try {
 			javacArea = this.buildJavacArea();

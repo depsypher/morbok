@@ -1,5 +1,8 @@
 Morbok Changelog
 ----------------
+### v0.1.2
+* installer improvements... fixing installer bug that affected windows, verified windows install works now.
+
 ### v0.1.1
 * installer improvements... using green chili peppers to represent morbok, fixing some of the text to be more accurate.
 

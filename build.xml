@@ -120,7 +120,7 @@
 		</unjar>
 	</target>
 
-	<target name="dist" description="Builds THE morbok.jar file which contains everything " depends="clean,  -unpackLibs, compile, version">
+	<target name="dist" description="Builds THE morbok.jar file which contains everything " depends="-unpackLibs, compile, version">
 		<mkdir dir="dist" />
 		<copy file="doc/changelog.markdown" tofile="build/changelog.txt" />
 		<jar destfile="dist/morbok-${morbok.version}.jar">
@@ -150,7 +150,7 @@
 		<fail message="fill in ${credentialsFile} to provide your credentials"/>
 	</target>
 
-	<target name="publish" description="Publishes the latest build to googlecode" depends="-checkCredentialsFile, dist">
+	<target name="publish" description="Publishes the latest build to googlecode" depends="-checkCredentialsFile, clean, dist">
 		<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="deps/website/ant-googlecode-0.0.2.jar" name="gcupload"/>
 		<property file="${credentialsFile}" prefix="google" />
 		<gcupload
