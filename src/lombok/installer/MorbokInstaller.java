@@ -154,11 +154,11 @@ public class MorbokInstaller {
 	private static void printHeadlessInfo() {
 		System.out.printf("About morbok v%s\n" +
 				"Morbok makes java better by providing very spicy additions to Lombok," +
-				"such as using @Logger to automatically generate a getter method for any field.\n\n" +
+				"such as using @Logger to automatically generate a logger for your class.\n\n" +
 				"Browse to %s for more information. To install morbok on Eclipse, re-run this jar file on a " +
 				"graphical computer system - this message is being shown because your terminal is not graphics capable." +
 				"If you are just using 'javac' or a tool that calls on javac, no installation is neccessary; just " +
-				"make sure morbok.jar is in the classpath when you compile. Example:\n\n" +
+				"make sure morbok.jar is in the classpath along with lombok.jar when you compile. Example:\n\n" +
 				"   java -cp lombok.jar:morbok.jar MyCode.java\n\n\n" +
 				"If for whatever reason you can't run the graphical installer but you do want to install morbok into eclipse," +
 				"start this jar with the following syntax:\n\n" +
@@ -174,7 +174,7 @@ public class MorbokInstaller {
 
 		appWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		appWindow.setResizable(false);
-		appWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(MorbokInstaller.class.getResource("lombokIcon.png")));
+		appWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(MorbokInstaller.class.getResource("morbokIcon.png")));
 
 		try {
 			javacArea = this.buildJavacArea();
@@ -549,7 +549,7 @@ public class MorbokInstaller {
 								"<html>Morbok has been installed on the selected Eclipse installations.<br>" +
 								"Don't forget to add <code>morbok.jar</code> to your projects, and restart your eclipse!<br>" +
 								"If you start eclipse with a custom -vm parameter, you'll need to add:<br>" +
-								"<code>-vmargs -Xbootclasspath/a:lombok.jar -javaagent:lombok.jar</code><br>" +
+								"<code>-vmargs -Xbootclasspath/a:lombok.jar" + File.pathSeparator + "morbok.jar -javaagent:lombok.jar</code><br>" +
 								"as parameter as well.</html>", "Install successful",
 								JOptionPane.INFORMATION_MESSAGE);
 						appWindow.setVisible(false);
@@ -673,8 +673,12 @@ public class MorbokInstaller {
 			});
 
 			if (location.hasLombok()) {
-				box.add(new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/lombokIcon.png"))));
+				box.add(new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/realLombokIcon.png"))));
 			}
+	        if (location.hasMorbok()) {
+	            box.add(new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/lombokIcon.png"))));
+	        }
+
 			box.add(Box.createHorizontalGlue());
 			locations.add(location);
 			this.add(box);
@@ -704,7 +708,7 @@ public class MorbokInstaller {
 	}
 
 	private void buildChrome(Container appWindowContainer) {
-		JLabel leftGraphic = new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/lombok.png")));
+		JLabel leftGraphic = new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/morbok.png")));
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -829,7 +833,7 @@ public class MorbokInstaller {
 		"<html>Morbok works 'out of the box' with javac.<br>Just make sure the lombok.jar and morbok.jar are in your classpath when you compile.";
 
 	private static final String JAVAC_EXAMPLE =
-		"<html>Example: <code>javac -cp lombok.jar:morbok.jar MyCode.java</code></html>";
+		"<html>Example: <code>javac -cp lombok.jar" + File.pathSeparator + "morbok.jar MyCode.java</code></html>";
 
 	private static final String UNINSTALL_TITLE =
 		"<html><font size=\"+1\"><b><i>Uninstall</i></b></font></html>";

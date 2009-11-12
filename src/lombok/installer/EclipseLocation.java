@@ -57,6 +57,7 @@ final class EclipseLocation {
 	private final String name;
 	private final File eclipseIniPath;
 	private volatile boolean hasLombok;
+	private volatile boolean hasMorbok;
 
 	/** Toggling the 'selected' checkbox in the GUI is tracked via this boolean */
 	boolean selected = true;
@@ -85,6 +86,7 @@ final class EclipseLocation {
 		this.eclipseIniPath = pathToEclipseIni;
 		try {
 			this.hasLombok = this.checkForLombok(eclipseIniPath);
+			this.hasMorbok = this.checkForMorbok(eclipseIniPath);
 		} catch (IOException e) {
 			throw new NotAnEclipseException(
 					"I can't read the configuration file of the Eclipse installed at " + name + "\n" +
@@ -211,11 +213,21 @@ final class EclipseLocation {
 		return hasLombok;
 	}
 
+	/**
+     * @return true if the Eclipse installation has been instrumented with morbok.
+     */
+    boolean hasMorbok() {
+        return hasMorbok;
+    }
+
 	private final Pattern JAVA_AGENT_LINE_MATCHER = Pattern.compile(
 			"^\\-javaagent\\:.*lombok.*\\.jar$", Pattern.CASE_INSENSITIVE);
 
 	private final Pattern BOOTCLASSPATH_LINE_MATCHER = Pattern.compile(
 	        "^\\-Xbootclasspath\\/a\\:(.*lombok.*\\.jar.*)$", Pattern.CASE_INSENSITIVE);
+
+	private final Pattern MORBOK_BOOTCLASSPATH_LINE_MATCHER = Pattern.compile(
+	        "^\\-Xbootclasspath\\/a\\:(.*morbok.*\\.jar.*)$", Pattern.CASE_INSENSITIVE);
 
 	private boolean checkForLombok(File iniFile) throws IOException {
 		if (!iniFile.exists()) return false;
@@ -231,6 +243,22 @@ final class EclipseLocation {
 		} finally {
 			fis.close();
 		}
+	}
+
+	private boolean checkForMorbok(File iniFile) throws IOException {
+	    if (!iniFile.exists()) return false;
+        FileInputStream fis = new FileInputStream(iniFile);
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (MORBOK_BOOTCLASSPATH_LINE_MATCHER.matcher(line.trim()).matches()) return true;
+            }
+
+            return false;
+        } finally {
+            fis.close();
+        }
 	}
 
 	/** Thrown when uninstalling lombok fails. */
