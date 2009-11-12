@@ -496,7 +496,7 @@ final class EclipseLocation {
 	        newContents.append(String.format(
 	                "-javaagent:%slombok.jar", fullPathToLombok)).append(OS_NEWLINE);
 			newContents.append(String.format(
-					"-Xbootclasspath/a:%slombok.jar%s%s", fullPathToLombok, File.pathSeparator, "morbok.jar")).append(OS_NEWLINE);
+					"-Xbootclasspath/a:%slombok.jar%s%smorbok.jar", fullPathToLombok, File.pathSeparator, fullPathToLombok)).append(OS_NEWLINE);
 
 			FileOutputStream fos = new FileOutputStream(eclipseIniPath);
 			try {

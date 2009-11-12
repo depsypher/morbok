@@ -1,5 +1,8 @@
 Morbok Changelog
 ----------------
+### v0.1.3
+* linux needs fullpath for morbok: installer should work on linux now.
+
 ### v0.1.2
 * installer improvements... fixing installer bug that affected windows, verified windows install works now.
 
