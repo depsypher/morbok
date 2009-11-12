@@ -1,5 +1,8 @@
 Morbok Changelog
 ----------------
+### v0.1.1
+* installer improvements... using green chili peppers to represent morbok, fixing some of the text to be more accurate.
+
 ### v0.1.0
 * issue#3: adding an installer based *heavily* on lombok's (thanks guys!)... only tested on mac so far.
 
