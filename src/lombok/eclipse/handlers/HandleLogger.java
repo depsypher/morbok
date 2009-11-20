@@ -58,7 +58,7 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
         long pos = (long)typeDecl.sourceStart << 32 | typeDecl.sourceEnd;
         int pS = (int)(pos >> 32), pE = (int)pos;
 
-        char[] logVariableName = this.getLogVariableName(annotation);
+        char[] logVariableName = this.getLogVariableName(annotation, annotationNode);
 
         if (logVariableName != null && fieldExists(new String(logVariableName), typeNode) == MemberExistsResult.NOT_EXISTS)
         {
@@ -152,12 +152,15 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
     }
 
     /* */
-    private char[] getLogVariableName(AnnotationValues<Logger> annotation)
+    private char[] getLogVariableName(AnnotationValues<Logger> annotation, EclipseNode annotationNode)
     {
         String name = annotation.getInstance().var();
 
         if (name == null || !name.matches("^[^0-9][a-zA-Z0-9$]*$"))
+        {
+            annotationNode.addWarning("Bad var provided, must be a valid java variable name.");
             return null;
+        }
 
         return name.toCharArray();
     }
