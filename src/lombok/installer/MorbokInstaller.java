@@ -624,7 +624,7 @@ public class MorbokInstaller {
 		}
 	}
 
-    void selectedLomboksChanged(List<EclipseLocation> selectedEclipses) {
+	void selectedLomboksChanged(List<EclipseLocation> selectedEclipses) {
 		boolean uninstallAvailable = false;
 		boolean installAvailable = false;
 		for (EclipseLocation loc : selectedEclipses) {
@@ -664,7 +664,6 @@ public class MorbokInstaller {
 			final JCheckBox checkbox = new JCheckBox(location.getName());
 			checkbox.setBackground(Color.WHITE);
 			box.add(checkbox);
-			checkbox.setSelected(true);
 			checkbox.addActionListener(new ActionListener() {
 				@Override public void actionPerformed(ActionEvent e) {
 					location.selected = checkbox.isSelected();
@@ -673,11 +672,21 @@ public class MorbokInstaller {
 			});
 
 			if (location.hasLombok()) {
+				checkbox.setSelected(true);
 				box.add(new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/realLombokIcon.png"))));
 			}
-	        if (location.hasMorbok()) {
-	            box.add(new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/lombokIcon.png"))));
-	        }
+			else {
+				JLabel label = new JLabel("(Lombok required)");
+				label.setForeground(Color.RED);
+				label.setAlignmentX(0.5f);
+				box.add(label);
+				checkbox.setSelected(false);
+				checkbox.setEnabled(false);
+				location.selected = false;
+			}
+			if (location.hasMorbok()) {
+				box.add(new JLabel(new ImageIcon(MorbokInstaller.class.getResource("/lombok/installer/lombokIcon.png"))));
+			}
 
 			box.add(Box.createHorizontalGlue());
 			locations.add(location);
@@ -805,7 +814,7 @@ public class MorbokInstaller {
 	/**
 	 * Makes the installer window visible.
 	 */
-    public void show() {
+	public void show() {
 		appWindow.setVisible(true);
 		if (EclipseFinder.getOS() == OS.MAC_OS_X) {
 			try {
