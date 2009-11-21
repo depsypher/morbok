@@ -21,6 +21,8 @@
 -->
 <project name="morbok" default="dist">
 
+	<property file="build.properties" />
+
 	<path id="morbok.deps.path">
 		<fileset dir="deps">
 			<include name="*.jar" />
@@ -134,12 +136,19 @@
 		</jar>
 		<copy file="dist/morbok-${morbok.version}.jar" tofile="dist/morbok.jar" />
 
-		<copy file="dist/morbok.jar" todir="../testbok/lib" />
-		<copy file="dist/morbok.jar" todir="/Applications/eclipse3.5/Eclipse.app/Contents/MacOS" />
+		<antcall target="copyToEclipse" />
+		<antcall target="copyToTestApp" />
+	</target>
+
+	<target name="copyToEclipse" if="eclipse.dir">
+		<copy file="dist/morbok.jar" todir="${eclipse.dir}" />
+	</target>
+
+	<target name="copyToTestApp" if="testapp.dir">
+		<copy file="dist/morbok.jar" todir="${testapp.dir}" />
 	</target>
 
 	<property name="credentialsFile" value="google.properties" />
-
 	<target name="-credentials">
 		<available property="hasCredentialsFile" file="${credentialsFile}"/>
 	</target>
