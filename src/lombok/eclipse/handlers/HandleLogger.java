@@ -97,7 +97,7 @@ public class HandleLogger implements EclipseAnnotationHandler<Logger>
 
                     send.receiver = new QualifiedNameReference(
                             Eclipse.fromQualifiedName("java.util.logging.Logger"),
-                            new long[] { pos, pos, pos, pos, pos }, pS, pE);
+                            new long[] { pos, pos, pos, pos }, pS, pE);
 
                     send.selector = "getLogger".toCharArray();
                     break;
