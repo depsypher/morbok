@@ -4,7 +4,7 @@ Morbok: Extensions for [Lombok](http://projectlombok.org).
 NOTE
 --
 Lombok now has @Log built in! Morbok is effectively obsoleted now, so just use Lombok instead! See this for more:
-[http://projectlombok.org/features/Log.html Lombok @Log]
+[Lombok @Log](https://projectlombok.org/features/log)
 
 Includes:
 --
